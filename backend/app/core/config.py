@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
     
     # CORS
-    CORS_ORIGINS: str = "http://localhost:3000"
+    CORS_ORIGINS: str = "https://union.ebnez.com.br,http://localhost:3000"
     
     # AWS S3 (optional)
     AWS_ACCESS_KEY_ID: Optional[str] = None
