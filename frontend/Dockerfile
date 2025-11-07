@@ -1,52 +1,59 @@
-# Stage 1: Build the application
+# Etapa 1: Construir a aplicação
 FROM node:18-alpine AS builder
 
-# Install build dependencies
+# Instalar dependências de build
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
-# Copy package files
+# Copiar arquivos de dependências
 COPY package.json package-lock.json* ./
 
-# Install dependencies
+# Instalar dependências
 RUN npm ci
 
-# Copy the rest of the application
+# Copiar o restante da aplicação
 COPY . .
 
-# Build the application
+# Construir a aplicação
 RUN npm run build
 
-# Stage 2: Production image
+# Etapa 2: Imagem de produção
 FROM node:18-alpine AS runner
 
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
-# Create a non-root user
+# Criar usuário não-root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy the built application from the builder stage
-COPY --from=builder --chown=nextjs:nodejs /app/next.config.js ./
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Copiar a aplicação construída
+COPY --from=builder /app/next.config.js .
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
-# Set permissions
+# Copiar a pasta app se existir
+COPY --from=builder /app/app ./app
+
+# Copiar outros arquivos necessários
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
+
+# Definir permissões
 RUN chown -R nextjs:nodejs /app
 
-# Switch to non-root user
+# Trocar para o usuário não-root
 USER nextjs
 
-# Expose the port the app runs on
+# Porta que a aplicação irá rodar
 EXPOSE 3000
 
-# Set environment variables
+# Variáveis de ambiente
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-# Start the application
+# Iniciar a aplicação
 CMD ["node", "server.js"]
