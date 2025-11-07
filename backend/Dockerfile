@@ -9,14 +9,14 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
-COPY requirements.txt .
+# Copy requirements first (for better caching)
+COPY ./requirements.txt /app/requirements.txt
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY . .
+COPY . /app/
 
 # Create uploads directory
 RUN mkdir -p /app/uploads
@@ -25,4 +25,4 @@ RUN mkdir -p /app/uploads
 EXPOSE 8000
 
 # Run migrations and start server
-CMD alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]

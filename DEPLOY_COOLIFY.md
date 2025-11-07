@@ -25,8 +25,9 @@ postgres://postgres:Zt4uVc1eFQMsImx4SMp2qLUrqL4QYQ8bQkqDFUoz0XS7e1nk60NEnArXxLJA
 4. Cole a URL: `https://github.com/gustavoml12/GrupoUnion.git`
 5. Branch: `main`
 6. Build Pack: **Dockerfile**
-7. Dockerfile Location: `backend/Dockerfile`
-8. Base Directory: `backend`
+7. **Dockerfile Location:** `./backend/Dockerfile`
+8. **Base Directory:** `backend` (IMPORTANTE: Deixe vazio se não funcionar)
+9. **Docker Build Context:** `backend`
 
 ### 2. Configurar Variáveis de Ambiente
 
@@ -37,7 +38,7 @@ Adicione as seguintes variáveis de ambiente:
 DATABASE_URL=postgresql://postgres:Zt4uVc1eFQMsImx4SMp2qLUrqL4QYQ8bQkqDFUoz0XS7e1nk60NEnArXxLJAX38S@zkoowg8sww8s4sws4sgo4g0c:5432/postgres
 
 # Security (IMPORTANTE: Gere uma chave segura!)
-SECRET_KEY=GERE_UMA_CHAVE_SUPER_SECRETA_AQUI_MIN_32_CARACTERES
+SECRET_KEY=0pPHGD4JK0bYcr2UgYV12o7Om94Jlh9K
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
@@ -47,7 +48,7 @@ ENVIRONMENT=production
 DEBUG=False
 
 # CORS (Adicione o domínio do seu frontend)
-ALLOWED_ORIGINS=https://seu-frontend.coolify.app,https://seu-dominio.com
+ALLOWED_ORIGINS=https://union.ebnez.com.br
 
 # File Upload
 UPLOAD_DIR=/app/uploads
@@ -67,7 +68,7 @@ MAX_FILE_SIZE=10485760
 
 1. Clique em **"Deploy"**
 2. Aguarde o build e deploy
-3. Anote a URL gerada (ex: `https://backend-xxx.coolify.app`)
+3. Anote a URL gerada (ex: `https://apiunion.ebnez.com.br`)
 
 ---
 
