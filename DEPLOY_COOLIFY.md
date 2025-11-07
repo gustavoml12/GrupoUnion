@@ -25,9 +25,10 @@ postgres://postgres:Zt4uVc1eFQMsImx4SMp2qLUrqL4QYQ8bQkqDFUoz0XS7e1nk60NEnArXxLJA
 4. Cole a URL: `https://github.com/gustavoml12/GrupoUnion.git`
 5. Branch: `main`
 6. Build Pack: **Dockerfile**
-7. **Dockerfile Location:** `./backend/Dockerfile`
-8. **Base Directory:** `backend` (IMPORTANTE: Deixe vazio se não funcionar)
-9. **Docker Build Context:** `backend`
+7. **IMPORTANTE - Configure assim:**
+   - **Dockerfile Location:** `Dockerfile` (SEM caminho, apenas o nome)
+   - **Base Directory:** `backend`
+   - **Watch Paths:** `backend/**`
 
 ### 2. Configurar Variáveis de Ambiente
 

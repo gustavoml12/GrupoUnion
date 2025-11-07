@@ -9,14 +9,11 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first (for better caching)
-COPY ./requirements.txt /app/requirements.txt
+# Copy all files
+COPY . .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy application code
-COPY . /app/
 
 # Create uploads directory
 RUN mkdir -p /app/uploads
