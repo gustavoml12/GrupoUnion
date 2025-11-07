@@ -2,105 +2,85 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import logoUnion from '../public/logo-union.png';
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
   const [dots, setDots] = useState('');
 
   useEffect(() => {
-    // Simula um carregamento
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-
+    // Adiciona classe para travar o scroll da página
+    document.body.style.overflow = 'hidden';
+    
     // Animação dos pontos
     const interval = setInterval(() => {
       setDots(prev => prev.length >= 3 ? '' : prev + '.');
     }, 500);
 
     return () => {
-      clearTimeout(timer);
+      // Remove a classe quando o componente é desmontado
+      document.body.style.overflow = 'unset';
       clearInterval(interval);
     };
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[#f8fafc] to-[#e2e8f0] p-4">
-        <div className="text-center">
-          <div className="relative w-48 h-48 mx-auto mb-8">
-            <Image
-              src="/logo-union.png"
-              alt="Logo Union"
-              fill
-              className="object-contain animate-pulse"
-              priority
-            />
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Preparando algo incrível para você{dots}
-          </h1>
-          <div className="w-32 h-1 bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] mx-auto my-6 rounded-full"></div>
-          <p className="text-gray-600 text-lg">Estamos quase lá!</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gradient-to-b from-[#f8fafc] to-[#e2e8f0]">
-      <div className="max-w-4xl w-full mx-auto text-center">
-        <div className="relative w-40 h-40 mx-auto mb-8">
+    <div className="fixed inset-0 bg-black flex flex-col items-center justify-center p-4 overflow-hidden">
+      {/* Overlay escuro com leve brilho roxo */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/20 to-black"></div>
+      
+      {/* Conteúdo principal centralizado */}
+      <div className="relative z-10 text-center">
+        {/* Logo com animação de pulso lento */}
+        <div className="relative w-48 h-48 mx-auto mb-8">
+          <div className="absolute inset-0 rounded-full bg-purple-500/10 animate-pulse-slow"></div>
           <Image
-            src="/logo-union.png"
+            src={logoUnion}
             alt="Logo Union"
             fill
-            className="object-contain"
+            className="object-contain animate-pulse-slow"
+            style={{ animationDuration: '3s' }}
             priority
           />
         </div>
         
-        <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-[#8B5CF6] via-[#3B82F6] to-[#06B6D4] bg-clip-text text-transparent">
-          Bem-vindo ao Ecosistema Union
+        {/* Texto principal */}
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          Estamos preparando algo especial para você{dots}
         </h1>
+        <p className="text-purple-200 text-lg mb-8">Em breve, uma nova experiência de networking</p>
         
-        <p className="text-xl text-gray-700 mb-12 max-w-2xl mx-auto">
-          Uma plataforma exclusiva para networking de alta performance e geração de negócios qualificados.
-        </p>
-
-        <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
-          <a
-            href="/login"
-            className="px-8 py-4 bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-all transform hover:scale-105 shadow-lg"
-          >
-            Entrar na Plataforma
-          </a>
-          <a
-            href="/register"
-            className="px-8 py-4 border-2 border-[#8B5CF6] text-[#8B5CF6] rounded-xl font-semibold text-lg hover:bg-[#8B5CF6] hover:text-white transition-all transform hover:scale-105"
-          >
-            Criar Conta
-          </a>
-        </div>
-
-        <div className="mt-12 p-6 bg-white/50 backdrop-blur-sm rounded-2xl shadow-sm max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">O que você vai encontrar:</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-lg font-semibold mb-2 text-[#8B5CF6]">🎯 Networking Qualificado</h3>
-              <p className="text-gray-600">Conecte-se com empresários comprometidos e alinhados com seus valores.</p>
-            </div>
-            <div className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-lg font-semibold mb-2 text-[#3B82F6]">💼 CRM de Indicações</h3>
-              <p className="text-gray-600">Gerencie suas indicações e acompanhe resultados de forma simples.</p>
-            </div>
-            <div className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-lg font-semibold mb-2 text-[#06B6D4]">📊 Reputação Transparente</h3>
-              <p className="text-gray-600">Sistema de feedback e métricas para relacionamentos mais seguros.</p>
-            </div>
-          </div>
+        {/* Barra de progresso sutil */}
+        <div className="w-64 h-1 bg-purple-900/50 rounded-full overflow-hidden mx-auto mb-12">
+          <div className="h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full animate-pulse" style={{ width: '100%' }}></div>
         </div>
       </div>
-    </main>
+      
+      {/* Botões no rodapé */}
+      <div className="fixed bottom-8 left-0 right-0 flex justify-center gap-6 z-10">
+        <a
+          href="/register"
+          className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-full font-semibold text-lg hover:opacity-90 transition-all transform hover:scale-105 shadow-lg hover:shadow-purple-500/30"
+        >
+          Conheça
+        </a>
+        <a
+          href="/login"
+          className="px-8 py-3 border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all transform hover:scale-105"
+        >
+          Acesse
+        </a>
+      </div>
+      
+      {/* Efeitos visuais */}
+      <style jsx global>{`
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.7; transform: scale(0.98); }
+          50% { opacity: 1; transform: scale(1.02); }
+        }
+        .animate-pulse-slow {
+          animation: pulse-slow 3s ease-in-out infinite;
+        }
+      `}</style>
+    </div>
   );
 }
