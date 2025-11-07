@@ -1,0 +1,11 @@
+installation:
+  version: 6.0.0-alpha.5
+  installDate: '2025-11-05T03:51:04.997Z'
+  lastUpdated: '2025-11-05T03:51:04.997Z'
+modules:
+  - core
+  - bmb
+  - bmm
+  - cis
+ides:
+  - windsurf

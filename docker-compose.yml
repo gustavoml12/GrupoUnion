@@ -1,0 +1,128 @@
+version: '3.8'
+
+services:
+  # ============================================
+  # FRONTEND - Next.js
+  # ============================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: ecosistema-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+    networks:
+      - ecosistema-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # ============================================
+  # BACKEND - FastAPI
+  # ============================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: ecosistema-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      # Database
+      - DATABASE_URL=postgresql://ecosistema_user:ecosistema_pass@postgres:5432/ecosistema_union
+      
+      # Redis
+      - REDIS_URL=redis://redis:6379/0
+      
+      # Security
+      - SECRET_KEY=dev-secret-key-change-in-production-min-32-chars
+      - API_SECRET=dev-api-secret-change-in-production-min-32-chars
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=15
+      - REFRESH_TOKEN_EXPIRE_DAYS=7
+      
+      # App
+      - APP_NAME=Ecosistema Union
+      - ENVIRONMENT=development
+      - DEBUG=true
+      
+      # CORS
+      - CORS_ORIGINS=http://localhost:3000
+    networks:
+      - ecosistema-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  # ============================================
+  # DATABASE - PostgreSQL
+  # ============================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: ecosistema-postgres
+    environment:
+      - POSTGRES_USER=ecosistema_user
+      - POSTGRES_PASSWORD=ecosistema_pass
+      - POSTGRES_DB=ecosistema_union
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - ecosistema-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecosistema_user -d ecosistema_union"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ============================================
+  # CACHE - Redis
+  # ============================================
+  redis:
+    image: redis:7-alpine
+    container_name: ecosistema-redis
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - ecosistema-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+# ============================================
+# NETWORKS
+# ============================================
+networks:
+  ecosistema-network:
+    driver: bridge
+
+# ============================================
+# VOLUMES
+# ============================================
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
