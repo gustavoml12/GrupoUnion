@@ -54,6 +54,9 @@ ALLOWED_ORIGINS=https://union.ebnez.com.br
 # File Upload
 UPLOAD_DIR=/app/uploads
 MAX_FILE_SIZE=10485760
+
+# Redis
+REDIS_URL=redis://default:8ciqP9OtBMCP3gnExR0vNQExnc6hn4BynJ2eU1tAiMrADe2GOCLgABKcBtJGhn6P@r8kwkk40c88wgwk4ogow8s8o:6379/0
 ```
 
 ### 3. Configurar Porta
