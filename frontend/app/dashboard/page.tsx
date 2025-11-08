@@ -329,32 +329,55 @@ export default function DashboardPage() {
           {(user.role === 'HUB' || user.role === 'ADMIN') && (
             <div className="mt-6 pt-6 border-t border-gray-200">
               <h3 className="text-sm font-medium text-gray-900 mb-3">Ações do Hub</h3>
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={() => router.push('/hub/members')}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-[#8B5CF6] to-[#06B6D4] hover:opacity-90 transition-opacity"
-                >
-                  👥 Gerenciar Usuários
-                </button>
-                <button
-                  onClick={() => router.push('/hub/videos')}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] hover:opacity-90 transition-opacity"
-                >
-                  🎥 Gerenciar Vídeos
-                </button>
-                <button
-                  onClick={() => router.push('/hub/meetings')}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-[#10B981] to-[#06B6D4] hover:opacity-90 transition-opacity"
-                >
-                  📅 Gerenciar Reuniões
-                </button>
-                <button
-                  onClick={() => router.push('/hub/collective-meetings')}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-[#EC4899] to-[#8B5CF6] hover:opacity-90 transition-opacity"
-                >
-                  👥 Reuniões Coletivas
-                </button>
-              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  {
+                    title: "Gerenciar Usuários",
+                    icon: "👥",
+                    path: "/hub/members",
+                    gradient: "from-[#8B5CF6] to-[#06B6D4]"
+                  },
+                  {
+                    title: "Gerenciar Vídeos",
+                    icon: "🎥",
+                    path: "/hub/videos",
+                    gradient: "from-[#3B82F6] to-[#06B6D4]"
+                  },
+                  {
+                    title: "Gerenciar Reuniões",
+                    icon: "📅",
+                    path: "/hub/meetings",
+                    gradient: "from-[#10B981] to-[#06B6D4]"
+                  },
+                  {
+                    title: "Reuniões Coletivas",
+                    icon: "👥",
+                    path: "/hub/collective-meetings",
+                    gradient: "from-[#EC4899] to-[#8B5CF6]"
+                  }
+                ].map((item, index) => (
+                  <div
+                    key={index}
+                    onClick={() => router.push(item.path)}
+                    className={`
+                      cursor-pointer rounded-xl p-4 transition-all duration-300
+                      bg-gradient-to-r ${item.gradient}
+                      shadow-lg hover:shadow-xl
+                      transform hover:-translate-y-1 hover:scale-[1.02]
+                      active:scale-[0.98] active:shadow-inner
+                      flex flex-col justify-center items-center
+                      group
+                    `}
+                  >
+                    <div className="text-2xl mb-2 group-hover:animate-bounce">
+                      {item.icon}
+                    </div>
+                    <div className="text-white text-center font-medium">
+                      {item.title}
+                    </div>
+                  </div>
+                ))}
+              </div>  
             </div>
           )}
         </div>
